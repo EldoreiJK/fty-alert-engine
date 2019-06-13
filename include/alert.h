@@ -1,7 +1,7 @@
 /*  =========================================================================
     alert - Alert representation
 
-    Copyright (C) 2014 - 2018 Eaton
+    Copyright (C) 2019 Eaton
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -42,6 +42,7 @@ class Alert {
         std::string id () { return m_Id; }
         void setResults (Rule::ResultsMap results)
             { m_Results = results; }
+        std::string outcome () { return m_Outcome; }
         std::string state () { return AlertStateToString (m_State); }
         uint64_t ctime () { return m_Ctime; }
         void setCtime (uint64_t ctime) { m_Ctime = ctime; }
@@ -54,7 +55,7 @@ class Alert {
         std::vector<std::string> actions () { return m_Actions; }
 
         void overwrite (fty_proto_t *msg);
-        void overwrite (std::shared_ptr<Rule> rule);
+        void overwrite (GenericRule rule);
         void update (fty_proto_t *msg);
         void cleanup ();
         int switchState (std::string state_str);
@@ -67,7 +68,6 @@ class Alert {
                 std::string port);
         zmsg_t *StaleToFtyProto ();
         zmsg_t *TriggeredToFtyProto ();
-        friend void alert_test (bool verbose);
     private:
         enum AlertState : uint8_t
         {
@@ -130,6 +130,7 @@ class Alert {
         std::string m_Description;
         std::vector<std::string> m_Actions;
 };
+void alert_test (bool verbose);
 //  @end
 
 #endif
